@@ -532,6 +532,7 @@ class CreateView(MethodView):
             u'save': self._is_save()
         }
         try:
+            log.info('###### CKAN dataset.py --- CreateView - Prepare')
             check_access(u'package_create', context)
         except NotAuthorized:
             return base.abort(403, _(u'Unauthorized to create a package'))
@@ -541,9 +542,12 @@ class CreateView(MethodView):
         # The staged add dataset used the new functionality when the dataset is
         # partially created so we need to know if we actually are updating or
         # this is a real new.
+
+        log.info('###### CKAN dataset.py --- CreateView - Post')
         context = self._prepare()
         is_an_update = False
         ckan_phase = request.form.get(u'_ckan_phase')
+        
         try:
             data_dict = clean_dict(
                 dict_fns.unflatten(tuplize_dict(parse_params(request.form)))
@@ -552,6 +556,8 @@ class CreateView(MethodView):
             return base.abort(400, _(u'Integrity Error'))
         try:
             if ckan_phase:
+                log.info('###### CKAN dataset.py --- CreateView - 1-ckan_phase  %s : ', ckan_phase)
+        
                 # prevent clearing of groups etc
                 context[u'allow_partial_update'] = True
                 # sort the tags
@@ -560,6 +566,7 @@ class CreateView(MethodView):
                         data_dict[u'tag_string']
                     )
                 if data_dict.get(u'pkg_name'):
+                    log.info('###### CKAN dataset.py --- CreateView - This is actually an update not a save')
                     is_an_update = True
                     # This is actually an update not a save
                     data_dict[u'id'] = data_dict[u'pkg_name']
@@ -571,6 +578,8 @@ class CreateView(MethodView):
                         context, data_dict
                     )
 
+                    log.info('###### CKAN dataset.py --- CreateView - package_type1 %s', package_type)
+        
                     # redirect to add dataset resources
                     url = h.url_for(
                         u'{}_resource.new'.format(package_type),
@@ -587,16 +596,28 @@ class CreateView(MethodView):
 
             data_dict[u'type'] = package_type
             context[u'message'] = data_dict.get(u'log_message', u'')
+            log.info('###### CKAN dataset.py --- CreateView - First time call create.py package_create')
+                    
             pkg_dict = get_action(u'package_create')(context, data_dict)
 
             if ckan_phase:
+                log.info('###### CKAN dataset.py --- CreateView - 2-ckan_phase %s :', ckan_phase)
+        
+                log.info('###### CKAN dataset.py --- CreateView - package_type2 %s', package_type)
+        
                 # redirect to add dataset resources
                 url = h.url_for(
                     u'{}_resource.new'.format(package_type),
                     id=pkg_dict[u'name']
                 )
+
+                log.info('###### CKAN dataset.py --- CreateView - Second time call url %s: ', url)
+            
                 return h.redirect_to(url)
 
+
+            log.info('###### CKAN dataset.py --- CreateView - _form_save_redirect, package_type %s', package_type)
+        
             return _form_save_redirect(
                 pkg_dict[u'name'], u'new', package_type=package_type
             )

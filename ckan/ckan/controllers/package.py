@@ -97,6 +97,17 @@ class PackageController(base.BaseController):
                 return result
         return lookup_package_plugin().resource_form()
 
+    def _resource_key(self, package_type):
+        # backwards compatibility with plugins not inheriting from
+        # DefaultDatasetPlugin and not implmenting resource_form
+        plugin = lookup_package_plugin(package_type)
+        if hasattr(plugin, 'resource_key'):
+            result = plugin.resource_key()
+            if result is not None:
+                return result
+        return lookup_package_plugin().resource_key()
+
+
     def _resource_template(self, package_type):
         # backwards compatibility with plugins not inheriting from
         # DefaultDatasetPlugin and not implmenting resource_template
@@ -516,6 +527,7 @@ class PackageController(base.BaseController):
         # Package needs to have a organization group in the call to
         # check_access and also to save it
         try:
+            log.info('###### CKAN package.py --------------- new')
             check_access('package_create', context)
         except NotAuthorized:
             abort(403, _('Unauthorized to create a package'))
@@ -564,6 +576,7 @@ class PackageController(base.BaseController):
     def resource_edit(self, id, resource_id, data=None, errors=None,
                       error_summary=None):
 
+        log.info('###### CKAN package.py --------------- resource_edit')
         context = {'model': model, 'session': model.Session,
                    'api_version': 3, 'for_edit': True,
                    'user': c.user, 'auth_user_obj': c.userobj}
@@ -633,6 +646,8 @@ class PackageController(base.BaseController):
     def new_resource(self, id, data=None, errors=None, error_summary=None):
         ''' FIXME: This is a temporary action to allow styling of the
         forms. '''
+
+        log.info("---------------- package.py -------------")
         if request.method == 'POST' and not data:
             save_action = request.params.get('save')
             data = data or \
@@ -656,6 +671,7 @@ class PackageController(base.BaseController):
 
             if not data_provided and save_action != "go-dataset-complete":
                 if save_action == 'go-dataset':
+                    print("#### CKAN package.py 1111")
                     # go to final stage of adddataset
                     h.redirect_to(controller='package', action='edit', id=id)
                 # see if we have added any resources
@@ -715,10 +731,12 @@ class PackageController(base.BaseController):
                     dict(data_dict, state='active'))
                 h.redirect_to(controller='package', action='read', id=id)
             elif save_action == 'go-dataset':
+                print("#### CKAN package.py 22222")
                 # go to first stage of add dataset
                 h.redirect_to(controller='package', action='edit', id=id)
             elif save_action == 'go-dataset-complete':
                 # go to first stage of add dataset
+                print("#### CKAN package.py 33333")
                 h.redirect_to(controller='package', action='read', id=id)
             else:
                 # add more resources
@@ -756,6 +774,7 @@ class PackageController(base.BaseController):
         return render(template, extra_vars=vars)
 
     def edit(self, id, data=None, errors=None, error_summary=None):
+        log.info('###### CKAN package.py --------------- edit')
         package_type = self._get_package_type(id)
         context = {'model': model, 'session': model.Session,
                    'user': c.user, 'auth_user_obj': c.userobj,
@@ -885,6 +904,7 @@ class PackageController(base.BaseController):
         # The staged add dataset used the new functionality when the dataset is
         # partially created so we need to know if we actually are updating or
         # this is a real new.
+        log.info("##### CKAN package.py ------- _save_new");
         is_an_update = False
         ckan_phase = request.params.get('_ckan_phase')
         from ckan.lib.search import SearchIndexError

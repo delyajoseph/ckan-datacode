@@ -35,13 +35,13 @@
                         {% set existing_project_id = data.get('project_id') %}
                         {% set empty_project = _('Please select the Project') %}
                             <option value="">{{ empty_project }}</option>
-                            <option value="proj1">Program 1</option>
-                            <option value="proj2">Program 2</option>
-                            <option value="proj3">Program 3</option>
-                            <option value="proj4">Program 4</option>
-                            <option value="proj5">Program 5</option>
-                            <option value="proj6">Program 6</option>
-                            <option value="proj7">Program 7</option>
+                            <option value="proj1">Project 1</option>
+                            <option value="proj2">Project 2</option>
+                            <option value="proj3">Project 3</option>
+                            <option value="proj4">Project 4</option>
+                            <option value="proj5">Project 5</option>
+                            <option value="proj6">Project 6</option>
+                            <option value="proj7">Project 7</option>
             
                           </select>
                     </div>
@@ -115,6 +115,40 @@
 
             </div>
        </div>
+       <div class="form-group">
+        {% set error = errors.program_id %}
+        <label class="control-label" for="field-project">{{ _("Milestone") }}</label>
+            <div class="controls">
+                <div class="row">
+                    <div class="col-md-6">
+                        <select id="field-milestone" name="milestone_id" data-module="autocomplete">
+                        {% set existing_milestone_id = data.get('milestone_id') %}
+                        {% set empty_milestone = _('Please select the Milestone') %}
+                            <option value="">{{ empty_milestone }}</option>
+                            <option value="mile1">Milestone 1</option>
+                            <option value="mile2">Milestone 2</option>
+                            <option value="mile3">Milestone 3</option>
+                            <option value="mile4">Milestone 4</option>
+                            <option value="mile5">Milestone 5</option>
+                            <option value="mile6">Milestone 6</option>
+                            <option value="mile7">Milestone 7</option>
+            
+                          </select>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6">
+                {% block package_basic_fields_objective %}
+                    {{ form.markdown('objective', id='field-objective', label=_('Objective of the Milestone'), placeholder=_('Objective of the milestone'), value=data.objective, error=errors.objective) }}
+                {% endblock %}
+
+            </div>    
+
+        </div>
+   </div>
 
 
     

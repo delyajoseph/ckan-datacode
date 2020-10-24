@@ -138,6 +138,7 @@ def package_create(context, data_dict):
     session = context['session']
     user = context['user']
 
+    log.info("################### CKAN create.py ---- package_create")
     if 'type' not in data_dict:
         package_plugin = lib_plugins.lookup_package_plugin()
         try:
@@ -156,6 +157,7 @@ def package_create(context, data_dict):
     else:
         schema = package_plugin.create_package_schema()
 
+    log.info('###### CKAN create.py --- CreateView')
     _check_access('package_create', context, data_dict)
 
     if 'api_version' not in context:

@@ -210,6 +210,7 @@ class CreateView(MethodView):
 
         if not data_provided and save_action != u"go-dataset-complete":
             if save_action == u'go-dataset':
+                print("#### CKAN resource.py 11111")
                 # go to final stage of adddataset
                 return h.redirect_to(u'{}.edit'.format(package_type), id=id)
             # see if we have added any resources
@@ -269,10 +270,11 @@ class CreateView(MethodView):
             )
             return h.redirect_to(u'{}.read'.format(package_type), id=id)
         elif save_action == u'go-dataset':
+            print("#### CKAN resource.py 22222")
             # go to first stage of add dataset
             return h.redirect_to(u'{}.edit'.format(package_type), id=id)
         elif save_action == u'go-dataset-complete':
-
+            print("#### CKAN resource.py 33333")
             return h.redirect_to(u'{}.read'.format(package_type), id=id)
         else:
             # add more resources

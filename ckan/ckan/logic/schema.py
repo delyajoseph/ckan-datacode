@@ -68,7 +68,12 @@ def default_tags_schema(
        tag_name_validator, ignore_missing, vocabulary_id_exists,
        ignore):
     return {
-        #'name': [not_missing, not_empty, unicode_safe, tag_length_validator, tag_name_validator],
+        'name': [not_missing, 
+                 not_empty, 
+                 unicode_safe, 
+                 tag_length_validator, 
+                 tag_name_validator,
+                 ],
                  #before it was not_missing instead of ignore_missing
         'vocabulary_id': [ignore_missing,
                           unicode_safe,
@@ -106,8 +111,8 @@ def default_create_package_schema(
         '__before': [duplicate_extras_key, ignore],
         'id': [empty_if_not_sysadmin, ignore_missing, unicode_safe,
                package_id_does_not_exist],
-        #'name': [
-         #   not_empty, unicode_safe, name_validator, package_name_validator],
+        'name': [
+            not_empty, unicode_safe, name_validator, package_name_validator],
         'title': [if_empty_same_as("name"), unicode_safe],
         'author': [ignore_missing, unicode_safe],
         'author_email': [ignore_missing, unicode_safe, email_validator],
