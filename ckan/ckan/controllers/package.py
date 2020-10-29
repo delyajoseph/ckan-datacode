@@ -689,6 +689,7 @@ class PackageController(base.BaseController):
                 if require_resources and not len(data_dict['resources']):
                     # no data and configured to require resource: stay on page
                     msg = _('You must add at least one data resource')
+                    log.info("#### CKAN package.py message - You must add at least one data resource")
                     # On new templates do not use flash message
 
                     if asbool(config.get('ckan.legacy_templates')):
@@ -724,6 +725,7 @@ class PackageController(base.BaseController):
                 abort(404, _('The dataset {id} could not be found.'
                              ).format(id=id))
             if save_action == 'go-metadata':
+                log.info("#### CKAN package.py ---- go-metadata")
                 # XXX race condition if another user edits/deletes
                 data_dict = get_action('package_show')(context, {'id': id})
                 get_action('package_update')(
@@ -731,14 +733,15 @@ class PackageController(base.BaseController):
                     dict(data_dict, state='active'))
                 h.redirect_to(controller='package', action='read', id=id)
             elif save_action == 'go-dataset':
-                print("#### CKAN package.py 22222")
+                log.info("#### CKAN package.py ---- go-dataset")
                 # go to first stage of add dataset
                 h.redirect_to(controller='package', action='edit', id=id)
             elif save_action == 'go-dataset-complete':
                 # go to first stage of add dataset
-                print("#### CKAN package.py 33333")
+                log.info("#### CKAN package.py ---- go-dataset-complete")
                 h.redirect_to(controller='package', action='read', id=id)
             else:
+                log.info("#### CKAN package.py ---- save_action else stmt")
                 # add more resources
                 h.redirect_to(controller='package', action='new_resource',
                               id=id)
@@ -904,7 +907,7 @@ class PackageController(base.BaseController):
         # The staged add dataset used the new functionality when the dataset is
         # partially created so we need to know if we actually are updating or
         # this is a real new.
-        log.info("##### CKAN package.py ------- _save_new");
+        log.info("##### CKAN package.py ------- _save_new")
         is_an_update = False
         ckan_phase = request.params.get('_ckan_phase')
         from ckan.lib.search import SearchIndexError

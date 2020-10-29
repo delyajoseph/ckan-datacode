@@ -547,6 +547,8 @@ class CreateView(MethodView):
         context = self._prepare()
         is_an_update = False
         ckan_phase = request.form.get(u'_ckan_phase')
+        log.info('request name = %s',ckan_phase)
+        log.info('request = %s',request)
         
         try:
             data_dict = clean_dict(
@@ -556,7 +558,7 @@ class CreateView(MethodView):
             return base.abort(400, _(u'Integrity Error'))
         try:
             if ckan_phase:
-                log.info('###### CKAN dataset.py --- CreateView - 1-ckan_phase  %s : ', ckan_phase)
+                log.info('###### CKAN dataset.py --- CreateView - 1-ckan_phase  ckan_phase= %s : ', ckan_phase)
         
                 # prevent clearing of groups etc
                 context[u'allow_partial_update'] = True
@@ -578,7 +580,7 @@ class CreateView(MethodView):
                         context, data_dict
                     )
 
-                    log.info('###### CKAN dataset.py --- CreateView - package_type1 %s', package_type)
+                    log.info('###### CKAN dataset.py --- CreateView - package_type1 = %s', package_type)
         
                     # redirect to add dataset resources
                     url = h.url_for(
@@ -588,7 +590,7 @@ class CreateView(MethodView):
                     return h.redirect_to(url)
                 # Make sure we don't index this dataset
                 if request.form[u'save'] not in [
-                    u'go-resource', u'go-metadata'
+                    u'go-resource', u'go-metadata', u'go-about-data'
                 ]:
                     data_dict[u'state'] = u'draft'
                 # allow the state to be changed
@@ -611,10 +613,11 @@ class CreateView(MethodView):
                     id=pkg_dict[u'name']
                 )
 
-                log.info('###### CKAN dataset.py --- CreateView - Second time call url %s: ', url)
+                log.info('###### CKAN dataset.py --- CreateView - Second time call url url= %s: ', url)
+                log.info('###### CKAN dataset.py --- CreateView - Second time call url id=  %s: ', id)
             
                 return h.redirect_to(url)
-
+                
 
             log.info('###### CKAN dataset.py --- CreateView - _form_save_redirect, package_type %s', package_type)
         

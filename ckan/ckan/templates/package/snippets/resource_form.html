@@ -20,125 +20,92 @@
   <input name="id" value="{{ data.id }}" type="hidden"/>
   
 
-  <!--{% block basic_fields %}
+  {% block basic_fields %}
     {% block basic_fields_url %}
       {% set is_upload = (data.url_type == 'upload') %}
       {{ form.image_upload(data, errors, field_url='url', field_upload='upload', field_clear='clear_upload',
          is_upload_enabled=h.uploads_enabled(), is_url=data.url and not is_upload, is_upload=is_upload,
          upload_label=_('Data'), url_label=_('URL'), placeholder=_('http://example.com/external-data.csv'), field_name='name') }}
     {% endblock %}
-
-    {% block basic_fields_name %}
+    <!--{% block basic_fields_name %}
       {{ form.input('name', id='field-name', label=_('Name'), placeholder=_('eg. January 2011 Gold Prices'), value=data.name, error=errors.name, classes=['control-full']) }}
+    {% endblock %}-->
+
+
+    {% block basic_fields_link %}
+      {{ form.input('link', id='field-link', label=_('Data link'), placeholder=_('www.ckan.com'), value=data.link, error=errors.link, classes=['control-full']) }}
     {% endblock %}
 
     {% block basic_fields_description %}
-      {{ form.markdown('description', id='field-description', label=_('Description'), placeholder=_('Some useful notes about the data'), value=data.description, error=errors.description) }}
+      {{ form.markdown('description', id='field-description', label=_('Brief about this file'), placeholder=_('Some useful notes about the data'), value=data.description, error=errors.description) }}
     {% endblock %}
+    {% block basic_fields_rights %}
+    <div class="form-group">
+      {% set error = errors.rights_id %}
+      <label class="control-label" style="padding-top: 25px;"for="field-rights">{{ _("Access rights") }}
+      </label>
+          <div class="controls">
+            <div class="row">
+              <div class="col-md-6">
+                <select id="field-rights" name="rights_id" data-module="autocomplete">
+                  {% set existing_rights_id = data.get('rights_id') %}
+                  {% set empty_rights = _('Please select the access right') %}
+                  <option value="">{{ empty_rights }}</option>
+                  <option value="1">Project Group</option>
+                  <option value="2">Program group</option>
+                  <option value="3">Public</option>
+                  <option value="4">Restricted</option>
+                </select>
+              </div>
+            </div>
+        </div>
+  
+  {% endblock %}
+  {% block basic_fields_restrDetails %}
+  {{ form.input('restrDetails', id='field-restrDetails', label=_('Restriction details'), placeholder=_('Details about restrictions'), value=data.restrDetails, error=errors.restrDetails, classes=['control-full']) }}
+  {% endblock %}
+  <div>
+    <label class="control-label" for="ownership">{{ _("Data Ownership") }}</label>
+  </div>
+  <div class="controls">
+    <div class="row">
+          <div class="col-md-6">
+            <label class="control-label" style="padding-top: 20px;"for="ownerName">{{ _("Owner Name") }}</label>
+            <span><input id="field-ownerName" type="text" name="ownerName" value="" placeholder="Owner Name" class="form-control" style="width:50%">
+            </span>
+          </div>
+        </div>    
+    </div>
+  <div class="controls">
+    <div class="row">
+      <div class="col-md-6">
+        <label class="control-label" style="padding-top: 20px;"for="ownerEmail">{{ _("Owner email") }}</label>
+        <span><input id="field-ownerEmail" type="text" name="ownerEmail" value="" placeholder="Owner email" class="form-control" style="width:50%"></span>
+      </div>
+    </div>    
+  </div>
 
-    {% block basic_fields_format %}
+    <!--{% block basic_fields_format %}
       {% set format_attrs = {'data-module': 'autocomplete', 'data-module-source': '/api/2/util/resource/format_autocomplete?incomplete=?'} %}
-      {% call form.input('format', id='field-format', label=_('Format'), placeholder=_('eg. CSV, XML or JSON'), value=data.format, error=errors.format, classes=['control-medium'], attrs=format_attrs) %}
+      {% call form.input('format', id='field-format', label=_('Format'), placeholder=_('eg. CSV, XML or JSON'), value=data.format, error=errors.format, classes=['control-medium'], attrs=format_attrs) %}-->
         <span class="info-block info-block-small">
           <i class="fa fa-info-circle"></i>
           {{ _('This will be guessed automatically. Leave blank if you wish') }}
         </span>
       {% endcall %}
     {% endblock %}
-  {% endblock basic_fields %}-->
-  {% block basic_fields_dcm %}
-  {{ form.markdown('dcm', id='field-dcm', label=_('Data collection Methdology'), placeholder=_('Brief about data collection methodology'), value=data.dcm, error=errors.dcm, classes=['control-full']) }}
-{% endblock %}
-{% block basic_fields_dqam %}
-  {{ form.markdown('dqam', id='field-dqam', label=_('Data QA or QC methodology'), placeholder=_('Brief about data QA or QC methodology'), value=data.dqam, error=errors.dqam, classes=['control-full']) }}
-{% endblock %}
-{% block basic_fields_dataType %}
-<div>
-<label style="padding-top:5px">Data types</label></div>
-<div style="display:inline">
-<input type="radio" id="generic" name="dataType" value="generic">
-<label for="generic">Generic</label></div>
-<div style="display:inline">
-<input type="radio" id="softwareSpecific" name="dataType" value="softwareSpecific">
-<label for="softwareSpecific">Software Specific</label></div>
-<div style="display:inline">
-<input type="radio" id="prop" name="dataType" value="prop">
-<label for="prop" style="padding-bottom:25px">Propreitory</label> 
-</div>
-
-{% endblock %}
-{% block basic_fields_version %}
-  {{ form.input('version', id='field-version', label=_('Data Version'), placeholder=_('Eg: 1 or 1.1 etc'), value=data.version, error=errors.version, classes=['control-full']) }}
-{% endblock %}
-{% block basic_fields_storage %}
-<div>
-<label style="padding-top:5px">Data Storage Location</label></div>
-<div style="display:inline">
-<input type="radio" id="cloud" name="storage" value="cloud">
-<label for="cloud">Cloud</label>
-</div>
-<div style="display:inline">
-<input type="radio" id="desktop" name="storage" value="desktop">
-<label for="desktop">Desktop</label>
-</div>
-<div style="display:inline">
-<input type="radio" id="organisation" name="storage" value="organisation">
-<label for="organisation" >Organisation</label> 
-</div>
-{% endblock %}
 
 
-{% block basic_fields_rights %}
-<div class="form-group">
-  {% set error = errors.rights_id %}
-  <label class="control-label" style="padding-top: 25px;"for="field-rights">{{ _("Access rights") }}</label>
-    <div class="controls">
-        <div class="row">
-            <div class="col-md-6">
-                <select id="field-rights" name="rights_id" data-module="autocomplete">
-                {% set existing_rights_id = data.get('rights_id') %}
-                {% set empty_rights = _('Please select the access right') %}
-                    <option value="">{{ empty_rights }}</option>
-                    <option value="1">Project Group</option>
-                    <option value="2">Program group</option>
-                    <option value="3">Public</option>
-                    <option value="4">Restricted</option>
-          
-          
-                </select>
-         </div>
-        </div>
-    </div>
-</div> 
-{% endblock %}
-{% block basic_fields_restrDetails %}
-  {{ form.input('restrDetails', id='field-restrDetails', label=_('Restriction details'), placeholder=_('Details about restrictions'), value=data.restrDetails, error=errors.restrDetails, classes=['control-full']) }}
-{% endblock %}
-<div>
-  <label class="control-label" for="ownership">{{ _("Data Ownership") }}</label>
-</div>
-<div class="controls">
-  <div class="row">
-      <div class="col-md-6">
-        <label class="control-label" style="padding-top: 20px;"for="ownerName">{{ _("Owner Name") }}</label>
-        <span><input id="field-ownerName" type="text" name="ownerName" value="" placeholder="Owner Name" class="form-control" style="width:50%"></span>
-      </div>
-  </div>    
-</div>
-<div class="controls">
-  <div class="row">
-      <div class="col-md-6">
-        <label class="control-label" style="padding-top: 20px;"for="ownerEmail">{{ _("Owner email") }}</label>
-        <span><input id="field-ownerEmail" type="text" name="ownerEmail" value="" placeholder="Owner email" class="form-control" style="width:50%"></span>
-      </div>
-  </div>    
-</div>
+    
+
+
+  {% endblock basic_fields %}
 
 
 
+  
 
-
-
+    
 
   {% block metadata_fields %}
     {% if include_metadata %}
@@ -164,8 +131,7 @@
       {% endif %}
     {% endblock %}
 
-    <!--<div> stage ----- {{ stage }}</div>-->
-
+  
     {% if stage %}
       {% block previous_button %}
         <button class="btn btn-default" name="save" value="go-dataset" type="submit">{{ _('Previous') }}</button>

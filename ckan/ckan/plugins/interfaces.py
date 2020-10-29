@@ -1275,6 +1275,7 @@ class IDatasetForm(Interface):
         '''
 
     def resource_form(self, package_type):
+        log.info('interfaces.py -------------- resource form')
         u'''Return the path to the template for the resource form.
 
         The path should be relative to the plugin's templates dir, e.g.

@@ -378,6 +378,7 @@ class DefaultDatasetForm(object):
         return 'package/new_package_form.html'
 
     def resource_form(self):
+        log.info('plugins.py -------------- resource form')
         return 'package/snippets/resource_form.html'
 
 

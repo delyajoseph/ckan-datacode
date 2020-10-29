@@ -207,6 +207,7 @@ config = local.config = CKANConfig()
 
 # Proxies to already thread-local safe objects
 request = CKANRequest(_get_request)
+
 # Provide a `c`  alias for `g` for backwards compatibility
 g = c = LocalProxy(_get_c)
 session = LocalProxy(_get_session)

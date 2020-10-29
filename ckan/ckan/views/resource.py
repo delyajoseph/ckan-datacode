@@ -223,14 +223,15 @@ class CreateView(MethodView):
                     404,
                     _(u'The dataset {id} could not be found.').format(id=id)
                 )
-            if not len(data_dict[u'resources']):
-                # no data so keep on page
-                msg = _(u'You must add at least one data resource')
+            #if not len(data_dict[u'resources']):
+                ## no data so keep on page
+            #    msg = _(u'You must add at least one data resource')
+            #    log.info("#### CKAN resource message - You must add at least one data resource")
                 # On new templates do not use flash message
 
-                errors = {}
-                error_summary = {_(u'Error'): msg}
-                return self.get(package_type, id, data, errors, error_summary)
+            #    errors = {}
+            #    error_summary = {_(u'Error'): msg}
+            #    return self.get(package_type, id, data, errors, error_summary)
 
             # XXX race condition if another user edits/deletes
             data_dict = get_action(u'package_show')(context, {u'id': id})
@@ -262,6 +263,7 @@ class CreateView(MethodView):
                 404, _(u'The dataset {id} could not be found.').format(id=id)
             )
         if save_action == u'go-metadata':
+            log.info("#### CKAN resource.py ---- go-metadata")
             # XXX race condition if another user edits/deletes
             data_dict = get_action(u'package_show')(context, {u'id': id})
             get_action(u'package_update')(
@@ -270,13 +272,14 @@ class CreateView(MethodView):
             )
             return h.redirect_to(u'{}.read'.format(package_type), id=id)
         elif save_action == u'go-dataset':
-            print("#### CKAN resource.py 22222")
+            log.info("#### CKAN resource.py ---- go-dataset")
             # go to first stage of add dataset
             return h.redirect_to(u'{}.edit'.format(package_type), id=id)
         elif save_action == u'go-dataset-complete':
-            print("#### CKAN resource.py 33333")
+            log.info("#### CKAN resource.py ------ go-dataset-complete")
             return h.redirect_to(u'{}.read'.format(package_type), id=id)
         else:
+            log.info("#### CKAN resource.py ---- save_action else stmt")
             # add more resources
             return h.redirect_to(
                 u'{}_resource.new'.format(package_type),

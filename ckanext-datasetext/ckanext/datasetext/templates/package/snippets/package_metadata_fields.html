@@ -1,9 +1,9 @@
 {% ckan_extends %}
 
 {% block package_metadata_fields %}
-    <link rel="stylesheet" href="/ext-styles.css" />  
    
     {% block package_basic_fields_program %}
+    
     <div class="form-group">
       {% set error = errors.program_id %}
       <label class="control-label" for="field-program">{{ _("Program") }}</label>
@@ -149,10 +149,6 @@
 
         </div>
    </div>
-
-
-    
-    
 
 {% endblock %}
 
